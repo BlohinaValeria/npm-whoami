@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  npm:
+    image: jc21/nginx-proxy-manager:latest
+    container_name: npm
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "81:81"
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+    networks:
+      - npm-network
+
+  whoami-1:
+    image: traefik/whoami
+    container_name: whoami-1
+    restart: unless-stopped
+    networks:
+      - npm-network
+
+  whoami-2:
+    image: traefik/whoami
+    container_name: whoami-2
+    restart: unless-stopped
+    networks:
+      - npm-network
+
+  whoami-3:
+    image: traefik/whoami
+    container_name: whoami-3
+    restart: unless-stopped
+    networks:
+      - npm-network
+
+networks:
+  npm-network:
+    driver: bridge
